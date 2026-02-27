@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+	  "target": "ES2022",              // compile to modern JavaScript
+	  "module": "CommonJS",            // the module system Node uses
+	  "rootDir": "./src",              // where our source files live
+	  "outDir": "./dist",              // where compiled JS will go for production
+	  "strict": true,                  // turn on ALL strict type-checking flags (crucial!)
+	  "esModuleInterop": true,         // helps import older JS libraries cleanly
+	  "skipLibCheck": true,            // speeds up compilation by not checking library files
+	  "forceConsistentCasingInFileNames": true
+	},
+	"include": ["src/**/*"]            // tell compiler to only look in the src folder
+}
