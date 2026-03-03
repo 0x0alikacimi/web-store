@@ -1,11 +1,9 @@
 import Fastify, { FastifyInstance } from 'fastify';
+import {healthRoutes} from './routes/health.routes';
 
 const server: FastifyInstance = Fastify({ logger: true });
 
-server.get('/ping', async (request, reply) =>
-{
-	return { status: 'ok', message: 'The engine is alive.' };
-});
+server.register(healthRoutes);
 
 const start = async () =>
 {
