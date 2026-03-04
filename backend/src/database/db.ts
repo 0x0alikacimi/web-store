@@ -7,6 +7,6 @@ const db = new Database(path.join(__dirname, '../../store.db'),
 	verbose: console.log //  prints every SQL query to the terminal
 });
 
-db.pragma('journal_mode = WAL');//optimization 
+// db.pragma('journal_mode = WAL');//optimization
 
 export default db;
