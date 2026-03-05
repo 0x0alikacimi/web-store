@@ -1,25 +1,28 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import {healthRoutes} from './routes/health.routes';
 import db from './database/db';
+import { productRoutes } from './routes/product.routes';
 
 const server: FastifyInstance = Fastify({ logger: true });
 
-const setup_db = () => {
+const setup_db = () =>
+{
 	db.exec(`
-	  CREATE TABLE IF NOT EXISTS products (
+		CREATE TABLE IF NOT EXISTS products (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL,
 		description TEXT,
 		price_cents INTEGER NOT NULL,
 		stock_quantity INTEGER NOT NULL DEFAULT 0,
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-	  );
+		);
 	`);
-  };
+};
 
 setup_db();
 
 server.register(healthRoutes);
+server.register(productRoutes);
 
 const start = async () =>
 {

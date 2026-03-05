@@ -10,7 +10,7 @@ export interface Product
 
 export const ProductRepository =
 {
-	findALL: (): Product[] =>
+	findAll: (): Product[] =>
 	{
 		const stmt = db.prepare('SELECT * FROM products');
 		return stmt.all() as Product[];
