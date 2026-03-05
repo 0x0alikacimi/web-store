@@ -14,8 +14,14 @@ export const ProductRepository =
 	{
 		const stmt = db.prepare('SELECT * FROM products');
 		return stmt.all() as Product[];
+		// .all() returns an array
 	},
-
+	findById: (id: number): Product | undefined =>
+	{
+		const stmt = db.prepare('SELECT * FROM products WHERE id = ?');
+		return stmt.get(id) as Product | undefined;
+		// .get() returns a single object
+	},
 	create: (product: Product) =>
 	{
 		const stmt = db.prepare(`INSERT INTO products (name, description, price_cents, stock_quantity)

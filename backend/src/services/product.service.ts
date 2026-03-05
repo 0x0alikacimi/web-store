@@ -1,3 +1,4 @@
+import { error } from "console";
 import { Product, ProductRepository } from "../repositories/product.repository";
 
 export const ProductService =
@@ -24,5 +25,15 @@ export const ProductService =
 	{
 		const products = ProductRepository.findAll();
 		return products;
+	},
+
+	getProductById: (id: number) =>
+	{
+		const product = ProductRepository.findById(id);
+		if (!product)
+		{
+			throw new Error("Product not found");
+		}
+		return product;
 	}
 };
