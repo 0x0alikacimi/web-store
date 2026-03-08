@@ -1,7 +1,8 @@
 import Fastify, { FastifyInstance } from 'fastify';
-import {healthRoutes} from './routes/health.routes';
 import db from './database/db';
+import {healthRoutes} from './routes/health.routes';
 import { productRoutes } from './routes/product.routes';
+import { userRoutes } from './routes/user.routes';
 
 const server: FastifyInstance = Fastify({ logger: true, ignoreTrailingSlash: true});
 
@@ -17,12 +18,21 @@ const setup_db = () =>
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 		);
 	`);
+	db.exec(`
+		CREATE TABLE IF NOT EXISTS users (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			email TEXT UNIQUE NOT NULL,
+			password_hash TEXT NOT NULL,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		);
+	`);
 };
 
 setup_db();
 
 server.register(healthRoutes);
 server.register(productRoutes);
+server.register(userRoutes);
 
 const start = async () =>
 {
