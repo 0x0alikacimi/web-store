@@ -3,7 +3,7 @@ import {healthRoutes} from './routes/health.routes';
 import db from './database/db';
 import { productRoutes } from './routes/product.routes';
 
-const server: FastifyInstance = Fastify({ logger: true });
+const server: FastifyInstance = Fastify({ logger: true, ignoreTrailingSlash: true});
 
 const setup_db = () =>
 {
