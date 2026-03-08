@@ -5,10 +5,10 @@ import { productRoutes } from './routes/product.routes';
 import { userRoutes } from './routes/user.routes';
 import fastifyJwt from '@fastify/jwt';
 import fastifyEnv from '@fastify/env';
-import './types/fastify.d.ts';
 
 
-const server: FastifyInstance = Fastify({ logger: true, ignoreTrailingSlash: true});
+
+const server: FastifyInstance = Fastify({ logger: true, routerOptions: { ignoreTrailingSlash: true }});
 
 /**********************/
 const setup_db = () =>

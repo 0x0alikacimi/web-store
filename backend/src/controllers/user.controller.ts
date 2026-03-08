@@ -25,7 +25,7 @@ export const loginHandler = async (request: FastifyRequest, reply: FastifyReply)
 	{
 		const credentials = request.body as CreateUserInput;
 		const res = await UserService.loginUser(credentials);
-		const token = reply.jwtSign({id: res.user.id, email: res.user.email});;
+		const token = await reply.jwtSign({id: res.user.id, email: res.user.email});;
 		return reply.status(200).send(
 		{
 			message: res.message,

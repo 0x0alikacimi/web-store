@@ -22,8 +22,5 @@
     "@types/node": "^25.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  },
-  "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/types"]
   }
 }

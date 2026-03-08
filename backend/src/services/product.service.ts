@@ -1,4 +1,3 @@
-import { error } from "console";
 import { Product, ProductRepository } from "../repositories/product.repository";
 
 export const ProductService =
