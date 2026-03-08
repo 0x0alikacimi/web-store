@@ -35,5 +35,22 @@ export const UserService =
 			messge : "User registered successfully",
 			userId: res.lastInsertRowid
 		};
+	},
+	loginUser: async (data : CreateUserInput) =>
+	{
+		const user = UserRepository.findByEmail(data.email);
+		if (!user)
+		{
+			throw new Error("Invalid email or password");
+		}
+		const isMatch = await bcrypt.compare(data.password, user.password_hash);
+		if (!isMatch)
+		{
+			throw new Error("Invalid email or password");
+		}
+		return {
+			message: "Login successful",
+			user: { id: user.id, email: user.email }//jwt tocken later 
+		};
 	}
 };
