@@ -55,16 +55,16 @@ const options =
 };
 
 
-server.register(healthRoutes);
-server.register(productRoutes);
-server.register(userRoutes);
-
 const start = async () =>
 {
 	try
 	{
 		await server.register(fastifyEnv, options);
 		server.register(fastifyJwt, {secret: server.config.JWT_SECRET});//this plugin adds a jwt.sign() method to the reply object.
+		server.register(healthRoutes);
+		server.register(productRoutes);
+		server.register(userRoutes);
+
 		await server.listen({ port: Number(server.config.PORT), host: '0.0.0.0' });
 	}
 	catch (err)
