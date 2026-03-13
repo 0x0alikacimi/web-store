@@ -1,5 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify';
-import db from './database/db';
+import db, { setup_db } from './database/db';
 import {healthRoutes} from './routes/health.routes';
 import { productRoutes } from './routes/product.routes';
 import { userRoutes } from './routes/user.routes';
@@ -11,31 +11,6 @@ import fastifyEnv from '@fastify/env';
 const server: FastifyInstance = Fastify({ logger: true, routerOptions: { ignoreTrailingSlash: true }});
 
 /**********************/
-const setup_db = () =>
-{
-	db.exec(`
-		CREATE TABLE IF NOT EXISTS users (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			email TEXT UNIQUE NOT NULL,
-			password_hash TEXT NOT NULL,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-		);
-	`);
-	
-	db.exec(`
-		CREATE TABLE IF NOT EXISTS products (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT NOT NULL,
-			description TEXT,
-			price_cents INTEGER NOT NULL,
-			stock_quantity INTEGER NOT NULL DEFAULT 0,
-			user_id INTEGER NOT NULL,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY (user_id) REFERENCES users (id)
-		);
-	`);
-};
-
 setup_db();
 /**********************/
 
