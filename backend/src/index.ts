@@ -8,7 +8,15 @@ import fastifyEnv from '@fastify/env';
 
 
 
-const server: FastifyInstance = Fastify({ logger: true, routerOptions: { ignoreTrailingSlash: true }});
+const server: FastifyInstance = Fastify(
+{
+	logger: true,
+	routerOptions: { ignoreTrailingSlash: true },
+	ajv:
+	{
+		customOptions:{ formats: { email: true }}//enables the 'email' format check
+	}
+});
 
 /**********************/
 setup_db();
