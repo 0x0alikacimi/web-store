@@ -21,7 +21,7 @@ const setup_db = () =>
 			price_cents INTEGER NOT NULL,
 			stock_quantity INTEGER NOT NULL DEFAULT 0,
 			user_id INTEGER NOT NULL,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (user_id) REFERENCES users (id)
 		);
 	`);
