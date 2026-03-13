@@ -2,6 +2,11 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { ProductService } from '../services/product.service';
 import { Product } from '../repositories/product.repository';
 
+interface ProductParams
+{
+	id: string;
+}
+
 export const createProductHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 {
 	try
@@ -30,7 +35,6 @@ export const getProductsHandler = async (request: FastifyRequest, reply: Fastify
 	}
 }
 
-
 export const getProductByIdHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 	{
 		try
@@ -48,4 +52,46 @@ export const getProductByIdHandler = async (request: FastifyRequest, reply: Fast
 		{
 			return reply.status(404).send({ status: 'error', message: error.message });
 		}
+};
+
+export const updateProductHandler = async (request: FastifyRequest<{ Params: ProductParams }>, reply: FastifyReply) =>
+{
+	try
+	{
+		const productId = parseInt(request.params.id);
+		const userId = request.user.id; // From the JWT!
+		const updateData = request.body as Partial<Product>;
+
+		const res = ProductService.updateProduct(productId, userId, updateData);
+		return reply.status(200).send(res);
+	}
+	catch (error: any)
+	{
+		if (error.message === "NOT_FOUND")
+			return reply.status(404).send({ error: "Product not found" });
+		if (error.message === "FORBIDDEN")
+			return reply.status(403).send({ error: "You do not own this product" });
+		return reply.status(400).send({ error: error.message });
+	}
+};
+
+
+export const deleteProductHandler = async (request: FastifyRequest<{ Params: ProductParams }>, reply: FastifyReply) =>
+{
+	try
+	{
+		const productId = parseInt(request.params.id);
+		const userId = request.user.id;
+
+		const res = ProductService.deleteProduct(productId, userId);
+		return reply.status(200).send(res);
+	}
+	catch (error: any)
+	{
+		if (error.message === "NOT_FOUND")
+			return reply.status(404).send({ error: "Product not found" });
+		if (error.message === "FORBIDDEN")
+			return reply.status(403).send({ error: "You do not own this product" });
+		return reply.status(400).send({ error: error.message });
+	}
 };

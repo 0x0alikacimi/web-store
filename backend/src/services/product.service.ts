@@ -34,5 +34,39 @@ export const ProductService =
 			throw new Error("Product not found");
 		}
 		return product;
+	},
+
+	updateProduct: (productId: number, userId: number, updateData: Partial<Product>) =>
+	{
+		const existingProduct = ProductRepository.findById(productId);
+		if (!existingProduct)
+		{
+			throw new Error("NOT_FOUND");
+		}
+
+		if (existingProduct.user_id !== userId)
+		{
+			throw new Error("FORBIDDEN");
+		}
+		ProductRepository.update(productId, updateData);
+		return { message: "Product updated successfully" };
+	},
+
+	deleteProduct: (productId: number, userId: number) =>
+	{
+		const existingProduct = ProductRepository.findById(productId);
+
+		if (!existingProduct)
+		{
+			throw new Error("NOT_FOUND");
+		}
+
+		if (existingProduct.user_id !== userId)
+		{
+			throw new Error("FORBIDDEN");
+		}
+
+		ProductRepository.delete(productId);
+		return { message: "Product deleted successfully" };
 	}
 };
