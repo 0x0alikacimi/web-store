@@ -7,6 +7,7 @@ export const createProductHandler = async (request: FastifyRequest, reply: Fasti
 	try
 	{
 		const productData = request.body as Product;
+		productData.user_id = request.user.id;
 		const res = ProductService.createProduct(productData);
 		return reply.status(201).send(res);
 	}

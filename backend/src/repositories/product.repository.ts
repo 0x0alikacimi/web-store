@@ -6,6 +6,7 @@ export interface Product
 	description: string;
 	price_cents: number;
 	stock_quantity: number;
+	user_id: number;
 }
 
 export const ProductRepository =
@@ -24,8 +25,8 @@ export const ProductRepository =
 	},
 	create: (product: Product) =>
 	{
-		const stmt = db.prepare(`INSERT INTO products (name, description, price_cents, stock_quantity)
-		VALUES (?, ?, ?, ?)`);
-		return stmt.run(product.name, product.description, product.price_cents, product.stock_quantity);
+		const stmt = db.prepare(`INSERT INTO products (name, description, price_cents, stock_quantity, user_id)
+		VALUES (?, ?, ?, ?, ?)`);
+		return stmt.run(product.name, product.description, product.price_cents, product.stock_quantity, product.user_id);
 	}
 };
