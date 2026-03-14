@@ -22,24 +22,12 @@ export async function productRoutes(server: FastifyInstance)
 	server.get('/products', getProductsHandler);
 	server.get('/products/:id', getProductByIdHandler);
 
-	// server.put('/products/:id',
-	// 	{ preHandler: [authenticate] },
-	// 	updateProductHandler
-	// );
-
-	server.put<{ Params: { id: string } }>(
-		'/products/:id',
+	server.patch('/products/:id',
 		{ preHandler: [authenticate] },
 		updateProductHandler
 	);
 
-	// server.delete('/products/:id',
-	// 	{ preHandler: [authenticate] },
-	// 	deleteProductHandler
-	// );
-
-	server.delete<{ Params: { id: string } }>(
-		'/products/:id',
+	server.delete('/products/:id',
 		{ preHandler: [authenticate] },
 		deleteProductHandler
 	);

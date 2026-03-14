@@ -54,12 +54,18 @@ export const getProductByIdHandler = async (request: FastifyRequest, reply: Fast
 		}
 };
 
-export const updateProductHandler = async (request: FastifyRequest<{ Params: ProductParams }>, reply: FastifyReply) =>
-{
+export const updateProductHandler = async (request: FastifyRequest, reply: FastifyReply) => {
 	try
 	{
-		const productId = parseInt(request.params.id);
-		const userId = request.user.id; // From the JWT!
+		const { id } = request.params as { id: string };
+		const productId = parseInt(id, 10);
+
+		if (isNaN(productId))
+		{
+			return reply.status(400).send({ message: "Invalid ID format" });
+		}
+
+		const userId = request.user.id;
 		const updateData = request.body as Partial<Product>;
 
 		const res = ProductService.updateProduct(productId, userId, updateData);
@@ -75,12 +81,17 @@ export const updateProductHandler = async (request: FastifyRequest<{ Params: Pro
 	}
 };
 
-
-export const deleteProductHandler = async (request: FastifyRequest<{ Params: ProductParams }>, reply: FastifyReply) =>
-{
+export const deleteProductHandler = async (request: FastifyRequest, reply: FastifyReply) => {
 	try
 	{
-		const productId = parseInt(request.params.id);
+		const { id } = request.params as { id: string };
+		const productId = parseInt(id, 10);
+
+		if (isNaN(productId))
+		{
+			return reply.status(400).send({ message: "Invalid ID format" });
+		}
+
 		const userId = request.user.id;
 
 		const res = ProductService.deleteProduct(productId, userId);
