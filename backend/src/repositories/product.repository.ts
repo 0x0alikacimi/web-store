@@ -7,27 +7,44 @@ export interface Product
 	price_cents: number;
 	stock_quantity: number;
 	user_id: number;
+	vendor_email?: string;
 }
 
 export const ProductRepository =
 {
 	findAll: (): Product[] =>
 	{
-		const stmt = db.prepare('SELECT * FROM products');
+		const stmt = db.prepare
+		(`
+			SELECT
+				products.*,
+				users.email AS vendor_email
+			FROM products
+			JOIN users ON products.user_id = users.id
+		`);
 		return stmt.all() as Product[];
-		// .all() returns an array
 	},
+
+	//warning: if a product somehow exists with a user_id that doesn't exist in the Users table, that product will not show up in the list at all. the JOIN requires a perfect match on both sides to include the row. (since we have foreign keys set up, this shouldn't happen, but it's good to know!)
 
 	findById: (id: number): Product | undefined =>
 	{
-		const stmt = db.prepare('SELECT * FROM products WHERE id = ?');
+		const stmt = db.prepare
+		(`
+			SELECT
+				products.*,
+				users.email AS vendor_email
+			FROM products
+			JOIN users ON products.user_id = users.id
+			WHERE products.id = ?
+		`);
 		return stmt.get(id) as Product | undefined;
-		// .get() returns a single object
 	},
 
 	create: (product: Product) =>
 	{
-		const stmt = db.prepare(`INSERT INTO products (name, description, price_cents, stock_quantity, user_id)
+		const stmt = db.prepare
+		(`INSERT INTO products (name, description, price_cents, stock_quantity, user_id)
 		VALUES (?, ?, ?, ?, ?)`);
 		return stmt.run(product.name, product.description, product.price_cents, product.stock_quantity, product.user_id);
 	},
