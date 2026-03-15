@@ -6,6 +6,7 @@ import { userRoutes } from './routes/user.routes';
 import fastifyJwt from '@fastify/jwt';
 import fastifyEnv from '@fastify/env';
 import { FastifyRequest, FastifyReply } from 'fastify';
+import cors from '@fastify/cors';
 
 
 const server: FastifyInstance = Fastify(
@@ -81,6 +82,14 @@ const start = async () =>
 	try
 	{
 		await server.register(fastifyEnv, options);
+
+		await server.register(cors,
+		{
+			origin: 'http://localhost:5173', // Only allow your specific frontend URL
+			methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // Allowed methods
+			allowedHeaders: ['Content-Type', 'Authorization']   // Allowed headers
+		});
+
 		server.register(fastifyJwt, {secret: server.config.JWT_SECRET});//this plugin adds a jwt.sign() method to the reply object.
 		server.register(healthRoutes);
 		server.register(productRoutes);
