@@ -1,17 +1,16 @@
 import { Product, ProductRepository } from "../repositories/product.repository";
+import { AppError } from "../errors/AppError";
 
 export const ProductService =
 {
 	createProduct: (data: Product) =>
 	{
 		if (data.price_cents < 0)
-		{
-			throw new Error("Price cannot be negative");
-		}
+			throw new AppError(400, 'VALIDATION_ERROR', 'Price cannot be negative');
+
 		if (!data.name || data.name.trim() === "")
-		{
-			throw new Error("Product name is required");
-		}
+			throw new AppError(400, 'VALIDATION_ERROR', 'Product name is required');
+
 		const res = ProductRepository.create(data);
 		return {
 			message: "Product created successfully",
@@ -22,17 +21,15 @@ export const ProductService =
 
 	getAllProducts: () =>
 	{
-		const products = ProductRepository.findAll();
-		return products;
+		return ProductRepository.findAll();
 	},
 
 	getProductById: (id: number) =>
 	{
 		const product = ProductRepository.findById(id);
 		if (!product)
-		{
-			throw new Error("Product not found");
-		}
+			throw new AppError(400, 'NOT_FOUND', 'Product not found'); // 400 preserved — see CLAUDE.md
+
 		return product;
 	},
 
@@ -40,14 +37,11 @@ export const ProductService =
 	{
 		const existingProduct = ProductRepository.findById(productId);
 		if (!existingProduct)
-		{
-			throw new Error("NOT_FOUND");
-		}
+			throw new AppError(404, 'NOT_FOUND', 'Resource not found');
 
 		if (existingProduct.user_id !== userId)
-		{
-			throw new Error("FORBIDDEN");
-		}
+			throw new AppError(403, 'FORBIDDEN', 'You do not own this resource');
+
 		ProductRepository.update(productId, updateData);
 		return { message: "Product updated successfully" };
 	},
@@ -55,16 +49,11 @@ export const ProductService =
 	deleteProduct: (productId: number, userId: number) =>
 	{
 		const existingProduct = ProductRepository.findById(productId);
-
 		if (!existingProduct)
-		{
-			throw new Error("NOT_FOUND");
-		}
+			throw new AppError(404, 'NOT_FOUND', 'Resource not found');
 
 		if (existingProduct.user_id !== userId)
-		{
-			throw new Error("FORBIDDEN");
-		}
+			throw new AppError(403, 'FORBIDDEN', 'You do not own this resource');
 
 		ProductRepository.delete(productId);
 		return { message: "Product deleted successfully" };

@@ -7,6 +7,7 @@ import fastifyJwt from '@fastify/jwt';
 import fastifyEnv from '@fastify/env';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import cors from '@fastify/cors';
+import { AppError } from './errors/AppError';
 
 
 const server: FastifyInstance = Fastify(
@@ -41,39 +42,20 @@ const options =
 	dotenv: true//read from the .env file
 };
 
-server.setErrorHandler((error: any , request: FastifyRequest, reply: FastifyReply) =>
+server.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) =>
 {
-		server.log.error(error);
+	server.log.error(error);
 
-		// JWT Authentication Errors (from request.jwtVerify)
-		if (error.code === 'FST_JWT_NO_AUTHORIZATION_IN_HEADER' || error.statusCode === 401)
-		{
-			return reply.status(401).send({ status: 'error', message: 'Unauthorized: Invalid or missing token' });
-		}
+	if (error.code === 'FST_JWT_NO_AUTHORIZATION_IN_HEADER' || error.statusCode === 401)
+		return reply.status(401).send({ status: 'error', message: 'Unauthorized: Invalid or missing token' });
 
-		switch (error.message)
-		{
-			case "NOT_FOUND":
-				return reply.status(404).send({ status: 'error', message: "Resource not found" });
-			case "FORBIDDEN":
-				return reply.status(403).send({ status: 'error', message: "You do not own this resource" });
-			case "INVALID_ID":
-				return reply.status(400).send({ status: 'error', message: "Invalid ID format" });
-		}
+	if (error.validation)
+		return reply.status(400).send({ status: 'error', message: 'Validation Failed', details: error.validation });
 
-		if (error.validation)
-		{
-			return reply.status(400).send({ status: 'error', message: "Validation Failed", details: error.validation });
-		}
+	if (error instanceof AppError)
+		return reply.status(error.statusCode).send({ status: 'error', message: error.message });
 
-		// catch expected user/product service errors ("Price cannot be negative" or "User already exists")
-		if (error.statusCode === 400 || !error.statusCode)
-		{
-			return reply.status(400).send({ status: 'error', message: error.message });
-		}
-
-		// the Catch-All for real crashes (500)
-		return reply.status(500).send({ status: 'error', message: "Internal Server Error" });
+	return reply.status(500).send({ status: 'error', message: 'Internal Server Error' });
 });
 // ----------------------------
 
