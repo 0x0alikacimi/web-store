@@ -8,7 +8,14 @@ import
 	deleteProductHandler
 } from "../controllers/product.controller";
 import { authenticate } from "./user.routes";
-import { createProductSchemas } from "../schemas/product.schema";
+import
+{
+	createProductSchemas,
+	getProductsSchema,
+	getProductByIdSchema,
+	patchProductSchema,
+	deleteProductSchema
+} from "../schemas/product.schema";
 
 export async function productRoutes(server: FastifyInstance)
 {
@@ -19,16 +26,16 @@ export async function productRoutes(server: FastifyInstance)
 		},
 		createProductHandler);
 
-	server.get('/products', getProductsHandler);
-	server.get('/products/:id', getProductByIdHandler);
+	server.get('/products', { schema: getProductsSchema }, getProductsHandler);
+	server.get('/products/:id', { schema: getProductByIdSchema }, getProductByIdHandler);
 
 	server.patch('/products/:id',
-		{ preHandler: [authenticate] },
+		{ preHandler: [authenticate], schema: patchProductSchema },
 		updateProductHandler
 	);
 
 	server.delete('/products/:id',
-		{ preHandler: [authenticate] },
+		{ preHandler: [authenticate], schema: deleteProductSchema },
 		deleteProductHandler
 	);
 }

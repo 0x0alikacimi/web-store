@@ -1,5 +1,6 @@
-import fastify, { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { registerUserHandler, loginHandler } from "../controllers/user.controller";
+import { registerSchema, loginSchema } from "../schemas/user.scema";
 
 export const authenticate = async (request: FastifyRequest, reply: FastifyReply) =>
 {
@@ -8,7 +9,7 @@ export const authenticate = async (request: FastifyRequest, reply: FastifyReply)
 
 export async function userRoutes(server: FastifyInstance)
 {
-	server.post('/register', registerUserHandler);
-	server.post('/login', loginHandler);
+	server.post('/register', { schema: registerSchema }, registerUserHandler);
+	server.post('/login', { schema: loginSchema }, loginHandler);
 }
 

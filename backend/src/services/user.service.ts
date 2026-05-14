@@ -16,8 +16,8 @@ export const UserService =
 		{
 			throw new Error("Email and password are required");
 		}
-		if (data.password.length < 6)
-			throw new Error("Password must be at least 6 characters");
+		if (data.password.length < 8)
+			throw new Error("Password must be at least 8 characters");
 
 		const existingUser = UserRepository.findByEmail(data.email);
 		if (existingUser)
