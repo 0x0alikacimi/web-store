@@ -9,5 +9,6 @@ export class AppError extends Error
 		this.name = 'AppError';
 		this.statusCode = statusCode;
 		this.errorCode = errorCode;
+		Object.setPrototypeOf(this, AppError.prototype);
 	}
 }

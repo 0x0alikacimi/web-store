@@ -12,15 +12,9 @@ export const UserService =
 {
 	registerUser: async (data: CreateUserInput) =>
 	{
-		if (!data.email || !data.password)
-			throw new AppError(400, 'VALIDATION_ERROR', 'Email and password are required');
-
-		if (data.password.length < 8)
-			throw new AppError(400, 'VALIDATION_ERROR', 'Password must be at least 8 characters');
-
 		const existingUser = UserRepository.findByEmail(data.email);
 		if (existingUser)
-			throw new AppError(400, 'CONFLICT', 'Email is already in use');
+			throw new AppError(409, 'CONFLICT', 'Email is already in use');
 
 		const hashedPassword = await bcrypt.hash(data.password, 10);
 		const res = UserRepository.create(
@@ -30,8 +24,8 @@ export const UserService =
 		});
 
 		return {
-			messge: "User registered successfully",
-			userId: res.lastInsertRowid
+			id: Number(res.lastInsertRowid),
+			email: data.email
 		};
 	},
 
@@ -39,15 +33,12 @@ export const UserService =
 	{
 		const user = UserRepository.findByEmail(data.email);
 		if (!user)
-			throw new AppError(400, 'INVALID_CREDENTIALS', 'Invalid email or password');
+			throw new AppError(401, 'INVALID_CREDENTIALS', 'Invalid email or password');
 
 		const isMatch = await bcrypt.compare(data.password, user.password_hash);
 		if (!isMatch)
-			throw new AppError(400, 'INVALID_CREDENTIALS', 'Invalid email or password');
+			throw new AppError(401, 'INVALID_CREDENTIALS', 'Invalid email or password');
 
-		return {
-			message: "Login successful",
-			user: { id: user.id, email: user.email }
-		};
+		return { id: user.id, email: user.email };
 	}
 };

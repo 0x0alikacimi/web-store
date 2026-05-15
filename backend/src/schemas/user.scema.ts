@@ -17,9 +17,18 @@ export const registerSchema =
 		201:
 		{
 			type: 'object',
-			properties: {
-				id: { type: 'number' },
-				email: { type: 'string' }
+			properties:
+			{
+				status: { type: 'string' },
+				data:
+				{
+					type: 'object',
+					properties:
+					{
+						id: { type: 'number' },
+						email: { type: 'string' }
+					}
+				}
 			}
 		}
 	}
@@ -45,14 +54,22 @@ export const loginSchema =
 			type: 'object',
 			properties:
 			{
-				token: { type: 'string' },//jwt
-				user:
+				status: { type: 'string' },
+				data:
 				{
 					type: 'object',
 					properties:
 					{
-						id: { type: 'number' },
-						email: { type: 'string' }
+						token: { type: 'string' },
+						user:
+						{
+							type: 'object',
+							properties:
+							{
+								id: { type: 'number' },
+								email: { type: 'string' }
+							}
+						}
 					}
 				}
 			}
