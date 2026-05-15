@@ -1,4 +1,5 @@
 import db from '../database/db';
+
 export interface Product
 {
 	id?: number;
@@ -7,36 +8,34 @@ export interface Product
 	price_cents: number;
 	stock_quantity: number;
 	user_id: number;
-	vendor_email?: string;
+}
+
+export interface PaginationParams
+{
+	limit: number;
+	offset: number;
 }
 
 export const ProductRepository =
 {
-	findAll: (): Product[] =>
+	findAll: ({ limit, offset }: PaginationParams): Product[] =>
 	{
 		const stmt = db.prepare
 		(`
-			SELECT
-				products.*,
-				users.email AS vendor_email
+			SELECT id, name, description, price_cents, stock_quantity, user_id
 			FROM products
-			JOIN users ON products.user_id = users.id
+			LIMIT ? OFFSET ?
 		`);
-		return stmt.all() as Product[];
+		return stmt.all(limit, offset) as Product[];
 	},
-
-	//warning: if a product somehow exists with a user_id that doesn't exist in the Users table, that product will not show up in the list at all. the JOIN requires a perfect match on both sides to include the row. (since we have foreign keys set up, this shouldn't happen, but it's good to know!)
 
 	findById: (id: number): Product | undefined =>
 	{
 		const stmt = db.prepare
 		(`
-			SELECT
-				products.*,
-				users.email AS vendor_email
+			SELECT id, name, description, price_cents, stock_quantity, user_id
 			FROM products
-			JOIN users ON products.user_id = users.id
-			WHERE products.id = ?
+			WHERE id = ?
 		`);
 		return stmt.get(id) as Product | undefined;
 	},
@@ -60,7 +59,6 @@ export const ProductRepository =
 				stock_quantity = COALESCE(?, stock_quantity)
 			WHERE id = ?
 		`);
-		//COALESCE means If the new value is null or undefined, keep the old database value
 		return stmt.run
 		(
 			product.name ?? null,
@@ -70,6 +68,7 @@ export const ProductRepository =
 			id
 		);
 	},
+
 	delete: (id: number) =>
 	{
 		const stmt = db.prepare(`DELETE FROM products WHERE id = ?`);

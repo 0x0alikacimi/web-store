@@ -9,6 +9,7 @@ declare module 'fastify'
 		{
 			PORT: string;
 			JWT_SECRET: string;
+			CORS_ORIGIN: string;
 		};
 	}
 }

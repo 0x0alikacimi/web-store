@@ -10,6 +10,12 @@ export const authenticate = async (request: FastifyRequest, reply: FastifyReply)
 export async function userRoutes(server: FastifyInstance)
 {
 	server.post('/register', { schema: registerSchema }, registerUserHandler);
-	server.post('/login', { schema: loginSchema }, loginHandler);
+	server.post('/login',
+		{
+			schema: loginSchema,
+			config: { rateLimit: { max: 5, timeWindow: '1 minute' } }
+		},
+		loginHandler
+	);
 }
 

@@ -1,5 +1,3 @@
-// the Fastify Schema lives at the very edge of server. Its job is to validate the Request to ensure the incoming JSON is shaped correctly
-
 const idParamsSchema =
 {
 	type: 'object',
@@ -14,9 +12,17 @@ const productShape =
 	description: { type: 'string' },
 	price_cents: { type: 'integer' },
 	stock_quantity: { type: 'integer' },
-	user_id: { type: 'number' },
-	vendor_email: { type: 'string' }
+	user_id: { type: 'number' }
 };
+
+const successWrapper = (dataSchema: object) => ({
+	type: 'object',
+	properties:
+	{
+		status: { type: 'string' },
+		data: dataSchema
+	}
+});
 
 export const createProductSchemas =
 {
@@ -32,34 +38,34 @@ export const createProductSchemas =
 			stock_quantity: { type: 'integer', minimum: 0 }
 		}
 	},
-
 	response:
 	{
-		201:
+		201: successWrapper(
 		{
 			type: 'object',
-			properties:
-			{
-				message: { type: 'string' },
-				productId: { type: 'number' }
-			}
-		}
+			properties: { productId: { type: 'number' } }
+		})
 	}
 };
 
 export const getProductsSchema =
 {
+	querystring:
+	{
+		type: 'object',
+		properties:
+		{
+			limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
+			offset: { type: 'integer', minimum: 0, default: 0 }
+		}
+	},
 	response:
 	{
-		200:
+		200: successWrapper(
 		{
-			type: 'object',
-			properties:
-			{
-				status: { type: 'string' },
-				data: { type: 'array', items: { type: 'object', properties: productShape } }
-			}
-		}
+			type: 'array',
+			items: { type: 'object', properties: productShape }
+		})
 	}
 };
 
@@ -68,7 +74,7 @@ export const getProductByIdSchema =
 	params: idParamsSchema,
 	response:
 	{
-		200: { type: 'object', properties: productShape }
+		200: successWrapper({ type: 'object', properties: productShape })
 	}
 };
 
@@ -87,6 +93,14 @@ export const patchProductSchema =
 			stock_quantity: { type: 'integer', minimum: 0 }
 		},
 		additionalProperties: false
+	},
+	response:
+	{
+		200: successWrapper(
+		{
+			type: 'object',
+			properties: { message: { type: 'string' } }
+		})
 	}
 };
 

@@ -4,64 +4,50 @@ import { Product } from '../repositories/product.repository';
 
 interface ProductParams
 {
-	id: string;
+	id: number;
+}
+
+interface GetProductsQuery
+{
+	limit: number;
+	offset: number;
 }
 
 export const createProductHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 {
 	const productData = request.body as Product;
 	productData.user_id = request.user.id;
-	const res = ProductService.createProduct(productData);
-	return reply.status(201).send(res);
+	const data = ProductService.createProduct(productData);
+	return reply.status(201).send({ status: 'success', data });
 };
 
 export const getProductsHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 {
-	const products = ProductService.getAllProducts();
-	return reply.status(200).send({status: 'success', data: products});
-}
+	const { limit, offset } = request.query as GetProductsQuery;
+	const data = ProductService.getAllProducts({ limit, offset });
+	return reply.status(200).send({ status: 'success', data });
+};
 
 export const getProductByIdHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 {
-	const { id } = request.params as { id: string };
-	const productId = parseInt(id, 10);
-	if (isNaN(productId))
-	{
-		return reply.status(400).send({ message: "Invalid ID format" });
-	}
-	const product = ProductService.getProductById(productId);
-	return reply.status(200).send(product);
+	const { id } = request.params as ProductParams;
+	const data = ProductService.getProductById(id);
+	return reply.status(200).send({ status: 'success', data });
 };
 
 export const updateProductHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 {
-	const { id } = request.params as { id: string };
-	const productId = parseInt(id, 10);
-
-	if (isNaN(productId))
-	{
-		return reply.status(400).send({ message: "Invalid ID format" });
-	}
-
+	const { id } = request.params as ProductParams;
 	const userId = request.user.id;
 	const updateData = request.body as Partial<Product>;
-
-	const res = ProductService.updateProduct(productId, userId, updateData);
-	return reply.status(200).send(res);
+	const data = ProductService.updateProduct(id, userId, updateData);
+	return reply.status(200).send({ status: 'success', data });
 };
 
 export const deleteProductHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 {
-	const { id } = request.params as { id: string };
-	const productId = parseInt(id, 10);
-
-	if (isNaN(productId))
-	{
-		return reply.status(400).send({ message: "Invalid ID format" });
-	}
-
+	const { id } = request.params as ProductParams;
 	const userId = request.user.id;
-
-	const res = ProductService.deleteProduct(productId, userId);
-	return reply.status(200).send(res);
+	ProductService.deleteProduct(id, userId);
+	return reply.status(204).send();
 };
