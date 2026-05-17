@@ -40,7 +40,7 @@ export const createProductSchemas =
 			description: { type: 'string', maxLength: 255 },
 			price_cents: { type: 'integer', minimum: 1 },
 			stock_quantity: { type: 'integer', minimum: 0 },
-			image_url: { type: 'string', minLength: 1 },
+			image_url: { type: 'string', format: 'uri' },
 			category_id: { type: 'integer', minimum: 1 },
 			is_featured: { type: 'integer', minimum: 0, maximum: 1, default: 0 }
 		}
@@ -100,7 +100,7 @@ export const patchProductSchema =
 			description: { type: 'string', maxLength: 255 },
 			price_cents: { type: 'integer', minimum: 1 },
 			stock_quantity: { type: 'integer', minimum: 0 },
-			image_url: { type: 'string', minLength: 1 },
+			image_url: { type: 'string', format: 'uri' },
 			category_id: { type: 'integer', minimum: 1 },
 			is_featured: { type: 'integer', minimum: 0, maximum: 1 }
 		},

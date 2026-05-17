@@ -1,4 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify';
+import ajvFormats from 'ajv-formats';
 import db, { setup_db } from './database/db';
 import { healthRoutes } from './routes/health.routes';
 import { productRoutes } from './routes/product.routes';
@@ -29,7 +30,8 @@ const server: FastifyInstance = Fastify(
 	routerOptions: { ignoreTrailingSlash: true },
 	ajv:
 	{
-		customOptions: { formats: { email: true } }
+		customOptions: { allErrors: false },
+		plugins: [ajvFormats as any]
 	}
 });
 
