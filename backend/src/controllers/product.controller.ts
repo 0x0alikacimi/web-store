@@ -11,6 +11,8 @@ interface GetProductsQuery
 {
 	limit: number;
 	offset: number;
+	category_id?: number;
+	featured?: boolean;
 }
 
 export const createProductHandler = async (request: FastifyRequest, reply: FastifyReply) =>
@@ -23,8 +25,13 @@ export const createProductHandler = async (request: FastifyRequest, reply: Fasti
 
 export const getProductsHandler = async (request: FastifyRequest, reply: FastifyReply) =>
 {
-	const { limit, offset } = request.query as GetProductsQuery;
-	const data = ProductService.getAllProducts({ limit, offset });
+	const { limit, offset, category_id, featured } = request.query as GetProductsQuery;
+	const data = ProductService.getAllProducts({
+		limit,
+		offset,
+		category_id: category_id ?? null,
+		featured: featured ?? null
+	});
 	return reply.status(200).send({ status: 'success', data });
 };
 

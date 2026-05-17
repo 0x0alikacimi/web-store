@@ -12,6 +12,10 @@ const productShape =
 	description: { type: 'string' },
 	price_cents: { type: 'integer' },
 	stock_quantity: { type: 'integer' },
+	image_url: { type: 'string' },
+	category_id: { type: 'integer' },
+	is_featured: { type: 'integer' },
+	updated_at: { type: 'string' },
 	user_id: { type: 'number' }
 };
 
@@ -29,13 +33,16 @@ export const createProductSchemas =
 	body:
 	{
 		type: 'object',
-		required: ['name', 'price_cents', 'stock_quantity'],
+		required: ['name', 'price_cents', 'stock_quantity', 'image_url'],
 		properties:
 		{
 			name: { type: 'string', minLength: 3, maxLength: 50 },
 			description: { type: 'string', maxLength: 255 },
 			price_cents: { type: 'integer', minimum: 1 },
-			stock_quantity: { type: 'integer', minimum: 0 }
+			stock_quantity: { type: 'integer', minimum: 0 },
+			image_url: { type: 'string', minLength: 1 },
+			category_id: { type: 'integer', minimum: 1 },
+			is_featured: { type: 'integer', minimum: 0, maximum: 1, default: 0 }
 		}
 	},
 	response:
@@ -56,7 +63,9 @@ export const getProductsSchema =
 		properties:
 		{
 			limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
-			offset: { type: 'integer', minimum: 0, default: 0 }
+			offset: { type: 'integer', minimum: 0, default: 0 },
+			category_id: { type: 'integer', minimum: 1 },
+			featured: { type: 'boolean' }
 		}
 	},
 	response:
@@ -90,7 +99,10 @@ export const patchProductSchema =
 			name: { type: 'string', minLength: 3, maxLength: 50 },
 			description: { type: 'string', maxLength: 255 },
 			price_cents: { type: 'integer', minimum: 1 },
-			stock_quantity: { type: 'integer', minimum: 0 }
+			stock_quantity: { type: 'integer', minimum: 0 },
+			image_url: { type: 'string', minLength: 1 },
+			category_id: { type: 'integer', minimum: 1 },
+			is_featured: { type: 'integer', minimum: 0, maximum: 1 }
 		},
 		additionalProperties: false
 	},

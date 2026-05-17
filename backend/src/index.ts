@@ -2,6 +2,7 @@ import Fastify, { FastifyInstance } from 'fastify';
 import db, { setup_db } from './database/db';
 import { healthRoutes } from './routes/health.routes';
 import { productRoutes } from './routes/product.routes';
+import { categoryRoutes } from './routes/category.routes';
 import { userRoutes } from './routes/user.routes';
 import fastifyJwt from '@fastify/jwt';
 import fastifyEnv from '@fastify/env';
@@ -98,6 +99,7 @@ const start = async () =>
 
 		server.register(healthRoutes);
 		server.register(productRoutes);
+		server.register(categoryRoutes);
 		server.register(userRoutes);
 
 		await server.listen({ port: Number(server.config.PORT), host: '0.0.0.0' });
