@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "seed": "ts-node --project tsconfig.scripts.json scripts/seed.ts"
   },
   "keywords": [],
   "author": "",
