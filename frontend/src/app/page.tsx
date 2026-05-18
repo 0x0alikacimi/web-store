@@ -29,7 +29,10 @@ export default async function HomePage()
 	const [products, categories] = await Promise.all([getProducts(), getCategories()]);
 
 	return (
-		<main className="max-w-5xl mx-auto px-8 py-16">
+		<main className="max-w-5xl mx-auto px-8 py-12">
+			<h1 className="text-xs tracking-[0.2em] uppercase text-stone-400 font-medium mb-10">
+				Collection
+			</h1>
 			<ProductList initialProducts={products} categories={categories} />
 		</main>
 	);

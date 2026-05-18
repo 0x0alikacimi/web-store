@@ -26,10 +26,10 @@ export function ProductCard({ product }: Props)
 				)}
 			</div>
 			<div className="px-5 py-4">
-				<h2 className="text-sm font-medium text-gray-900 tracking-wide leading-snug">
+				<h2 className="text-sm font-medium text-charcoal tracking-wide leading-snug">
 					{product.name}
 				</h2>
-				<p className="text-sm text-gray-400 mt-1.5">
+				<p className="text-sm text-stone-400 mt-1.5">
 					{formatCents(product.price_cents)}
 				</p>
 			</div>

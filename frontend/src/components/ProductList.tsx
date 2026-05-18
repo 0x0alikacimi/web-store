@@ -59,10 +59,10 @@ export function ProductList({ initialProducts, categories }: Props)
 				<button
 					onClick={() => selectCategory(null)}
 					disabled={loading}
-					className={`px-3 py-1 text-sm border transition-colors disabled:cursor-not-allowed ${
+					className={`px-3 py-1 text-xs tracking-wide border transition-colors disabled:cursor-not-allowed ${
 						activeCategoryId === null
-							? "bg-gray-900 text-white border-gray-900"
-							: "text-gray-600 border-gray-300 hover:border-gray-500 hover:text-gray-900"
+							? "bg-charcoal text-ivory border-charcoal"
+							: "text-stone-500 border-stone-300 hover:border-charcoal hover:text-charcoal"
 					}`}
 				>
 					All
@@ -72,10 +72,10 @@ export function ProductList({ initialProducts, categories }: Props)
 						key={cat.id}
 						onClick={() => selectCategory(cat.id)}
 						disabled={loading}
-						className={`px-3 py-1 text-sm border transition-colors disabled:cursor-not-allowed ${
+						className={`px-3 py-1 text-xs tracking-wide border transition-colors disabled:cursor-not-allowed ${
 							activeCategoryId === cat.id
-								? "bg-gray-900 text-white border-gray-900"
-								: "text-gray-600 border-gray-300 hover:border-gray-500 hover:text-gray-900"
+								? "bg-charcoal text-ivory border-charcoal"
+								: "text-stone-500 border-stone-300 hover:border-charcoal hover:text-charcoal"
 						}`}
 					>
 						{cat.name}
@@ -84,7 +84,7 @@ export function ProductList({ initialProducts, categories }: Props)
 			</div>
 
 			{products.length === 0 ? (
-				<p className="text-sm text-gray-400">No products listed yet.</p>
+				<p className="text-sm text-stone-400">No products listed yet.</p>
 			) : (
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 					{products.map((product) => (
@@ -98,7 +98,7 @@ export function ProductList({ initialProducts, categories }: Props)
 					<button
 						onClick={loadMore}
 						disabled={loading}
-						className="px-6 py-2.5 text-sm text-gray-600 border border-gray-300 hover:border-gray-400 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+						className="px-6 py-2.5 text-xs tracking-wide text-stone-500 border border-stone-300 hover:border-charcoal hover:text-charcoal disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 					>
 						{loading ? "Loading..." : "Load More"}
 					</button>
