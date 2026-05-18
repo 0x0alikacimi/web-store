@@ -16,7 +16,7 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? 'bg-[rgba(250,248,244,0.92)] backdrop-blur-md border-b border-[#e8e0d5]'
           : 'bg-transparent'
@@ -26,7 +26,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link
             href="/"
-            className="text-xs tracking-[0.25em] uppercase font-medium text-charcoal"
+            className={`text-xs tracking-[0.25em] uppercase font-medium transition-colors duration-500 ${scrolled ? 'text-charcoal' : 'text-white'}`}
           >
             Web Store
           </Link>
@@ -34,7 +34,7 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-8">
             <Link
               href="/shop"
-              className="text-xs tracking-[0.15em] uppercase text-stone-400 hover:text-charcoal transition-colors duration-200"
+              className={`text-xs tracking-[0.15em] uppercase transition-colors duration-500 ${scrolled ? 'text-stone-400 hover:text-charcoal' : 'text-stone-300 hover:text-white'}`}
             >
               Shop
             </Link>
@@ -42,7 +42,7 @@ export function Navbar() {
 
           <div className="flex items-center gap-4">
             <button
-              className="p-1 text-charcoal hover:text-stone-400 transition-colors duration-200"
+              className={`p-1 transition-colors duration-500 ${scrolled ? 'text-charcoal hover:text-stone-400' : 'text-white hover:text-stone-300'}`}
               aria-label="Search"
             >
               <svg
@@ -61,7 +61,7 @@ export function Navbar() {
             </button>
 
             <button
-              className="p-1 text-charcoal hover:text-stone-400 transition-colors duration-200"
+              className={`p-1 transition-colors duration-500 ${scrolled ? 'text-charcoal hover:text-stone-400' : 'text-white hover:text-stone-300'}`}
               aria-label="Cart"
             >
               <svg
@@ -81,7 +81,7 @@ export function Navbar() {
             </button>
 
             <button
-              className="md:hidden p-1 text-charcoal hover:text-stone-400 transition-colors duration-200"
+              className={`md:hidden p-1 transition-colors duration-500 ${scrolled ? 'text-charcoal hover:text-stone-400' : 'text-white hover:text-stone-300'}`}
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             >
