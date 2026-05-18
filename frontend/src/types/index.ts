@@ -20,6 +20,18 @@ export interface ProductsApiResponse
 	data: Product[];
 }
 
+export interface Category
+{
+	id: number;
+	name: string;
+}
+
+export interface CategoriesApiResponse
+{
+	status: "success" | "error";
+	data: Category[];
+}
+
 export interface ApiError
 {
 	status: "error";
