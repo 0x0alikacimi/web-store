@@ -33,16 +33,10 @@ export function Navbar() {
 
           <nav className="hidden md:flex items-center gap-8">
             <Link
-              href="/"
+              href="/shop"
               className="text-xs tracking-[0.15em] uppercase text-stone-400 hover:text-charcoal transition-colors duration-200"
             >
               Shop
-            </Link>
-            <Link
-              href="/"
-              className="text-xs tracking-[0.15em] uppercase text-stone-400 hover:text-charcoal transition-colors duration-200"
-            >
-              Categories
             </Link>
           </nav>
 
@@ -126,18 +120,11 @@ export function Navbar() {
           <Container>
             <nav className="flex flex-col py-7 gap-6">
               <Link
-                href="/"
+                href="/shop"
                 className="text-xs tracking-[0.2em] uppercase text-charcoal"
                 onClick={() => setMenuOpen(false)}
               >
                 Shop
-              </Link>
-              <Link
-                href="/"
-                className="text-xs tracking-[0.2em] uppercase text-charcoal"
-                onClick={() => setMenuOpen(false)}
-              >
-                Categories
               </Link>
             </nav>
           </Container>

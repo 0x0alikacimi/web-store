@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Product } from "@/types";
 
 function formatCents(cents: number): string
@@ -13,7 +14,7 @@ interface Props
 export function ProductCard({ product }: Props)
 {
 	return (
-		<div className="group bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] transition-shadow duration-300">
+		<Link href={`/products/${product.id}`} className="group bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] transition-shadow duration-300">
 			<div className="overflow-hidden aspect-[3/4] bg-stone-50">
 				{product.image_url ? (
 					<img
@@ -33,6 +34,6 @@ export function ProductCard({ product }: Props)
 					{formatCents(product.price_cents)}
 				</p>
 			</div>
-		</div>
+		</Link>
 	);
 }

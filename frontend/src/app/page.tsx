@@ -1,43 +1,25 @@
-import { Product, ProductsApiResponse, Category, CategoriesApiResponse } from "@/types";
-import { ProductList } from "@/components/ProductList";
-import { Container, Section } from "@/components/layout";
-import { API_BASE_URL } from "@/lib/config";
-import { PRODUCTS_LIMIT } from "@/lib/constants";
+import Link from "next/link";
+import { Container } from "@/components/layout";
 
-async function getProducts(): Promise<Product[]>
+export default function HomePage()
 {
-	const res = await fetch(
-		`${API_BASE_URL}/products?limit=${PRODUCTS_LIMIT}&offset=0`,
-		{ cache: "no-store" }
-	);
-	if (!res.ok)
-		throw new Error(`Failed to fetch products: ${res.status} ${res.statusText}`);
-	const json: ProductsApiResponse = await res.json();
-	return json.data;
-}
-
-async function getCategories(): Promise<Category[]>
-{
-	const res = await fetch(`${API_BASE_URL}/categories`, { cache: "no-store" });
-	if (!res.ok)
-		throw new Error(`Failed to fetch categories: ${res.status} ${res.statusText}`);
-	const json: CategoriesApiResponse = await res.json();
-	return json.data;
-}
-
-export default async function HomePage()
-{
-	const [products, categories] = await Promise.all([getProducts(), getCategories()]);
-
 	return (
 		<main>
 			<Container>
-				<Section>
-					<h1 className="text-xs tracking-[0.2em] uppercase text-stone-400 font-medium mb-10">
-						Collection
+				<div className="flex flex-col items-start justify-center min-h-[60vh]">
+					<p className="text-xs tracking-[0.25em] uppercase text-stone-400 mb-4">
+						New arrivals
+					</p>
+					<h1 className="text-4xl md:text-5xl font-medium text-charcoal tracking-tight leading-tight max-w-md">
+						Thoughtfully curated goods.
 					</h1>
-					<ProductList initialProducts={products} categories={categories} />
-				</Section>
+					<Link
+						href="/shop"
+						className="mt-10 px-6 py-3 text-xs tracking-[0.2em] uppercase bg-charcoal text-ivory hover:bg-stone-700 transition-colors duration-200"
+					>
+						Shop the collection
+					</Link>
+				</div>
 			</Container>
 		</main>
 	);
