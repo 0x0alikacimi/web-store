@@ -1,9 +1,14 @@
 import { Product, ProductsApiResponse } from "@/types";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductList } from "@/components/ProductList";
+
+const LIMIT = 12;
 
 async function getProducts(): Promise<Product[]>
 {
-	const res = await fetch("http://localhost:3000/products", { cache: "no-store" });
+	const res = await fetch(
+		`http://localhost:3000/products?limit=${LIMIT}&offset=0`,
+		{ cache: "no-store" }
+	);
 	if (!res.ok)
 		throw new Error(`Failed to fetch products: ${res.status} ${res.statusText}`);
 	const json: ProductsApiResponse = await res.json();
@@ -16,15 +21,7 @@ export default async function HomePage()
 
 	return (
 		<main className="max-w-5xl mx-auto px-8 py-16">
-			{products.length === 0 ? (
-				<p className="text-sm text-gray-400">No products listed yet.</p>
-			) : (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-					{products.map((product) => (
-						<ProductCard key={product.id} product={product} />
-					))}
-				</div>
-			)}
+			<ProductList initialProducts={products} />
 		</main>
 	);
 }
