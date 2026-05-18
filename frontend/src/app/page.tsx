@@ -1,12 +1,13 @@
 import { Product, ProductsApiResponse } from "@/types";
 import { ProductList } from "@/components/ProductList";
+import { API_BASE_URL } from "@/lib/config";
 
 const LIMIT = 12;
 
 async function getProducts(): Promise<Product[]>
 {
 	const res = await fetch(
-		`http://localhost:3000/products?limit=${LIMIT}&offset=0`,
+		`${API_BASE_URL}/products?limit=${LIMIT}&offset=0`,
 		{ cache: "no-store" }
 	);
 	if (!res.ok)

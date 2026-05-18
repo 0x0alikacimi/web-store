@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Product, ProductsApiResponse } from "@/types";
 import { ProductCard } from "@/components/ProductCard";
+import { API_BASE_URL } from "@/lib/config";
 
 const LIMIT = 12;
 
@@ -23,7 +24,7 @@ export function ProductList({ initialProducts }: Props)
 		try
 		{
 			const res = await fetch(
-				`http://localhost:3000/products?limit=${LIMIT}&offset=${offset}`
+				`${API_BASE_URL}/products?limit=${LIMIT}&offset=${offset}`
 			);
 			if (!res.ok) throw new Error("Failed to fetch");
 			const json: ProductsApiResponse = await res.json();

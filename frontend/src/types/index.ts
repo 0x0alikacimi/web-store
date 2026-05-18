@@ -6,9 +6,10 @@ export interface Product
 	description: string | null;
 	price_cents: number;
 	stock_quantity: number;
-	image_url: string;
+	image_url: string | null;
 	category_id: number | null;
-	is_featured: number;
+	is_featured: 0 | 1;
+	vendor_email?: string;
 	updated_at: string | null;
 	user_id: number;
 }
