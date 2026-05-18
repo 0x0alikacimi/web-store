@@ -1,15 +1,13 @@
 import { Product, ProductsApiResponse, Category, CategoriesApiResponse } from "@/types";
 import { ProductList } from "@/components/ProductList";
-import { Container, Section } from "@/components/layout";
 import { API_BASE_URL } from "@/lib/config";
 import { PRODUCTS_LIMIT } from "@/lib/constants";
 
-async function getProducts(): Promise<Product[]>
+async function getProducts(categoryId: number | null): Promise<Product[]>
 {
-	const res = await fetch(
-		`${API_BASE_URL}/products?limit=${PRODUCTS_LIMIT}&offset=0`,
-		{ cache: "no-store" }
-	);
+	let url = `${API_BASE_URL}/products?limit=${PRODUCTS_LIMIT}&offset=0`;
+	if (categoryId !== null) url += `&category_id=${categoryId}`;
+	const res = await fetch(url, { cache: "no-store" });
 	if (!res.ok)
 		throw new Error(`Failed to fetch products: ${res.status} ${res.statusText}`);
 	const json: ProductsApiResponse = await res.json();
@@ -25,20 +23,38 @@ async function getCategories(): Promise<Category[]>
 	return json.data;
 }
 
-export default async function ShopPage()
+export default async function ShopPage({ searchParams }: { searchParams: Promise<{ category?: string }> })
 {
-	const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+	const params = await searchParams;
+	const raw = params.category ? parseInt(params.category, 10) : null;
+	const initialCategoryId = raw !== null && !isNaN(raw) ? raw : null;
+
+	const [products, categories] = await Promise.all([
+		getProducts(initialCategoryId),
+		getCategories(),
+	]);
 
 	return (
 		<main>
-			<Container>
-				<Section>
-					<h1 className="text-xs tracking-[0.2em] uppercase text-stone-400 font-medium mb-10">
-						Collection
+			<div className="border-b border-stone-200">
+				<div className="max-w-6xl mx-auto px-8 py-16 md:py-20">
+					<span className="text-[10px] tracking-[0.45em] uppercase text-stone-400">Collection</span>
+					<h1 className="font-display text-5xl md:text-6xl italic font-light text-charcoal tracking-tight mt-3 mb-4">
+						Shop All
 					</h1>
-					<ProductList initialProducts={products} categories={categories} />
-				</Section>
-			</Container>
+					<p className="text-sm text-stone-500 tracking-wide leading-relaxed max-w-xs">
+						Carefully selected pieces, made to last.
+					</p>
+				</div>
+			</div>
+
+			<div className="max-w-6xl mx-auto px-8 py-16 md:py-20">
+				<ProductList
+					initialProducts={products}
+					categories={categories}
+					initialCategoryId={initialCategoryId}
+				/>
+			</div>
 		</main>
 	);
 }

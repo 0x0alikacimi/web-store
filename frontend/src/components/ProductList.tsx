@@ -3,28 +3,43 @@
 import { useState } from "react";
 import { Product, ProductsApiResponse, Category } from "@/types";
 import { ProductCard } from "@/components/ProductCard";
-import { Grid } from "@/components/layout";
 import { API_BASE_URL } from "@/lib/config";
 import { PRODUCTS_LIMIT } from "@/lib/constants";
 
 const LIMIT = PRODUCTS_LIMIT;
 
+type LoadState = "idle" | "filtering" | "paginating";
+
 interface Props {
 	initialProducts: Product[];
 	categories: Category[];
+	initialCategoryId?: number | null;
 }
 
-export function ProductList({ initialProducts, categories }: Props)
+function SkeletonCard()
+{
+	return (
+		<div className="animate-pulse">
+			<div className="aspect-[3/4] bg-stone-200" />
+			<div className="pt-4 pb-5 space-y-2.5">
+				<div className="h-2.5 bg-stone-200 rounded-sm w-3/4" />
+				<div className="h-2 bg-stone-200 rounded-sm w-1/4" />
+			</div>
+		</div>
+	);
+}
+
+export function ProductList({ initialProducts, categories, initialCategoryId = null }: Props)
 {
 	const [products, setProducts] = useState<Product[]>(initialProducts);
 	const [offset, setOffset] = useState(initialProducts.length);
 	const [hasMore, setHasMore] = useState(initialProducts.length === LIMIT);
-	const [loading, setLoading] = useState(false);
-	const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
+	const [loadState, setLoadState] = useState<LoadState>("idle");
+	const [activeCategoryId, setActiveCategoryId] = useState<number | null>(initialCategoryId);
 
 	async function fetchProducts(categoryId: number | null, currentOffset: number, append: boolean)
 	{
-		setLoading(true);
+		setLoadState(append ? "paginating" : "filtering");
 		try
 		{
 			let url = `${API_BASE_URL}/products?limit=${LIMIT}&offset=${currentOffset}`;
@@ -39,7 +54,7 @@ export function ProductList({ initialProducts, categories }: Props)
 		}
 		finally
 		{
-			setLoading(false);
+			setLoadState("idle");
 		}
 	}
 
@@ -54,54 +69,75 @@ export function ProductList({ initialProducts, categories }: Props)
 		fetchProducts(activeCategoryId, offset, true);
 	}
 
+	const isFiltering = loadState === "filtering";
+	const isPaginating = loadState === "paginating";
+
 	return (
 		<>
-			<div className="flex flex-wrap gap-2 mb-8">
-				<button
-					onClick={() => selectCategory(null)}
-					disabled={loading}
-					className={`px-3 py-1 text-xs tracking-wide border transition-colors disabled:cursor-not-allowed ${
-						activeCategoryId === null
-							? "bg-charcoal text-ivory border-charcoal"
-							: "text-stone-500 border-stone-300 hover:border-charcoal hover:text-charcoal"
-					}`}
-				>
-					All
-				</button>
-				{categories.map((cat) => (
+			<div className="mb-14">
+				<div className="flex items-center gap-6 mb-6">
+					<span className="text-[10px] tracking-[0.35em] uppercase text-stone-400 shrink-0">Filter</span>
+					<div className="flex-1 h-px bg-stone-200" />
+				</div>
+				<div className="flex flex-wrap gap-2">
 					<button
-						key={cat.id}
-						onClick={() => selectCategory(cat.id)}
-						disabled={loading}
-						className={`px-3 py-1 text-xs tracking-wide border transition-colors disabled:cursor-not-allowed ${
-							activeCategoryId === cat.id
+						onClick={() => selectCategory(null)}
+						disabled={loadState !== "idle"}
+						className={`px-4 py-1.5 text-[11px] tracking-[0.1em] border transition-colors duration-200 disabled:cursor-not-allowed ${
+							activeCategoryId === null
 								? "bg-charcoal text-ivory border-charcoal"
 								: "text-stone-500 border-stone-300 hover:border-charcoal hover:text-charcoal"
 						}`}
 					>
-						{cat.name}
+						All
 					</button>
-				))}
+					{categories.map((cat) => (
+						<button
+							key={cat.id}
+							onClick={() => selectCategory(cat.id)}
+							disabled={loadState !== "idle"}
+							className={`px-4 py-1.5 text-[11px] tracking-[0.1em] border transition-colors duration-200 disabled:cursor-not-allowed ${
+								activeCategoryId === cat.id
+									? "bg-charcoal text-ivory border-charcoal"
+									: "text-stone-500 border-stone-300 hover:border-charcoal hover:text-charcoal"
+							}`}
+						>
+							{cat.name}
+						</button>
+					))}
+				</div>
 			</div>
 
-			{products.length === 0 ? (
-				<p className="text-sm text-stone-400">No products listed yet.</p>
+			{isFiltering ? (
+				<div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10">
+					{Array.from({ length: 8 }).map((_, i) => (
+						<SkeletonCard key={i} />
+					))}
+				</div>
+			) : products.length === 0 ? (
+				<div className="py-28 text-center">
+					<div className="w-8 h-px bg-stone-300 mx-auto mb-6" />
+					<p className="text-sm text-stone-400 tracking-wide">Nothing here yet.</p>
+				</div>
 			) : (
-				<Grid>
+				<div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10">
 					{products.map((product) => (
 						<ProductCard key={product.id} product={product} />
 					))}
-				</Grid>
+				</div>
 			)}
 
-			{hasMore && (
-				<div className="mt-12 flex justify-center">
+			{hasMore && !isFiltering && (
+				<div className="mt-16 flex justify-center">
 					<button
 						onClick={loadMore}
-						disabled={loading}
-						className="px-6 py-2.5 text-xs tracking-wide text-stone-500 border border-stone-300 hover:border-charcoal hover:text-charcoal disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+						disabled={isPaginating}
+						className="flex items-center gap-2.5 px-8 py-3 text-[10px] tracking-[0.25em] uppercase text-stone-500 border border-stone-300 hover:border-charcoal hover:text-charcoal disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
 					>
-						{loading ? "Loading..." : "Load More"}
+						{isPaginating && (
+							<span className="inline-block w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
+						)}
+						{isPaginating ? "Loading" : "Load more"}
 					</button>
 				</div>
 			)}
