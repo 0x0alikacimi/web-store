@@ -1,0 +1,148 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Container } from './layout';
+
+export function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-[rgba(250,248,244,0.92)] backdrop-blur-md border-b border-[#e8e0d5]'
+          : 'bg-transparent'
+      }`}
+    >
+      <Container>
+        <div className="flex items-center justify-between h-16">
+          <Link
+            href="/"
+            className="text-xs tracking-[0.25em] uppercase font-medium text-charcoal"
+          >
+            Web Store
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-8">
+            <Link
+              href="/"
+              className="text-xs tracking-[0.15em] uppercase text-stone-400 hover:text-charcoal transition-colors duration-200"
+            >
+              Shop
+            </Link>
+            <Link
+              href="/"
+              className="text-xs tracking-[0.15em] uppercase text-stone-400 hover:text-charcoal transition-colors duration-200"
+            >
+              Categories
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <button
+              className="p-1 text-charcoal hover:text-stone-400 transition-colors duration-200"
+              aria-label="Search"
+            >
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </button>
+
+            <button
+              className="p-1 text-charcoal hover:text-stone-400 transition-colors duration-200"
+              aria-label="Cart"
+            >
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+              </svg>
+            </button>
+
+            <button
+              className="md:hidden p-1 text-charcoal hover:text-stone-400 transition-colors duration-200"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            >
+              {menuOpen ? (
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                >
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                >
+                  <path d="M3 12h18M3 6h18M3 18h18" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </Container>
+
+      {menuOpen && (
+        <div className="md:hidden border-t border-[#e8e0d5] bg-[rgba(250,248,244,0.96)] backdrop-blur-md">
+          <Container>
+            <nav className="flex flex-col py-7 gap-6">
+              <Link
+                href="/"
+                className="text-xs tracking-[0.2em] uppercase text-charcoal"
+                onClick={() => setMenuOpen(false)}
+              >
+                Shop
+              </Link>
+              <Link
+                href="/"
+                className="text-xs tracking-[0.2em] uppercase text-charcoal"
+                onClick={() => setMenuOpen(false)}
+              >
+                Categories
+              </Link>
+            </nav>
+          </Container>
+        </div>
+      )}
+    </header>
+  );
+}
