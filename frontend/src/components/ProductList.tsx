@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Product, ProductsApiResponse, Category } from "@/types";
 import { ProductCard } from "@/components/ProductCard";
+import { Grid } from "@/components/layout";
 import { API_BASE_URL } from "@/lib/config";
 import { PRODUCTS_LIMIT } from "@/lib/constants";
 
@@ -86,11 +87,11 @@ export function ProductList({ initialProducts, categories }: Props)
 			{products.length === 0 ? (
 				<p className="text-sm text-stone-400">No products listed yet.</p>
 			) : (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+				<Grid>
 					{products.map((product) => (
 						<ProductCard key={product.id} product={product} />
 					))}
-				</div>
+				</Grid>
 			)}
 
 			{hasMore && (

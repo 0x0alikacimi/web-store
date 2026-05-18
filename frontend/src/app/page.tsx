@@ -1,5 +1,6 @@
 import { Product, ProductsApiResponse, Category, CategoriesApiResponse } from "@/types";
 import { ProductList } from "@/components/ProductList";
+import { Container, Section } from "@/components/layout";
 import { API_BASE_URL } from "@/lib/config";
 import { PRODUCTS_LIMIT } from "@/lib/constants";
 
@@ -29,11 +30,15 @@ export default async function HomePage()
 	const [products, categories] = await Promise.all([getProducts(), getCategories()]);
 
 	return (
-		<main className="max-w-5xl mx-auto px-8 py-12">
-			<h1 className="text-xs tracking-[0.2em] uppercase text-stone-400 font-medium mb-10">
-				Collection
-			</h1>
-			<ProductList initialProducts={products} categories={categories} />
+		<main>
+			<Container>
+				<Section>
+					<h1 className="text-xs tracking-[0.2em] uppercase text-stone-400 font-medium mb-10">
+						Collection
+					</h1>
+					<ProductList initialProducts={products} categories={categories} />
+				</Section>
+			</Container>
 		</main>
 	);
 }
