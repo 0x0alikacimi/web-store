@@ -4,8 +4,9 @@ import { useState } from "react";
 import { Product, ProductsApiResponse, Category } from "@/types";
 import { ProductCard } from "@/components/ProductCard";
 import { API_BASE_URL } from "@/lib/config";
+import { PRODUCTS_LIMIT } from "@/lib/constants";
 
-const LIMIT = 12;
+const LIMIT = PRODUCTS_LIMIT;
 
 interface Props {
 	initialProducts: Product[];
@@ -55,11 +56,28 @@ export function ProductList({ initialProducts, categories }: Props)
 	return (
 		<>
 			<div className="flex flex-wrap gap-2 mb-8">
-				<button onClick={() => selectCategory(null)} disabled={loading}>
+				<button
+					onClick={() => selectCategory(null)}
+					disabled={loading}
+					className={`px-3 py-1 text-sm border transition-colors disabled:cursor-not-allowed ${
+						activeCategoryId === null
+							? "bg-gray-900 text-white border-gray-900"
+							: "text-gray-600 border-gray-300 hover:border-gray-500 hover:text-gray-900"
+					}`}
+				>
 					All
 				</button>
 				{categories.map((cat) => (
-					<button key={cat.id} onClick={() => selectCategory(cat.id)} disabled={loading}>
+					<button
+						key={cat.id}
+						onClick={() => selectCategory(cat.id)}
+						disabled={loading}
+						className={`px-3 py-1 text-sm border transition-colors disabled:cursor-not-allowed ${
+							activeCategoryId === cat.id
+								? "bg-gray-900 text-white border-gray-900"
+								: "text-gray-600 border-gray-300 hover:border-gray-500 hover:text-gray-900"
+						}`}
+					>
 						{cat.name}
 					</button>
 				))}
