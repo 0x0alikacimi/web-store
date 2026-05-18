@@ -31,18 +31,27 @@ export default async function HomePage()
 			{products.map((product) => (
 				<div
 				key={product.id}
-				className="border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
+				className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
 				>
-				<h2 className="text-xl font-semibold">{product.name}</h2>
-				<p className="text-2xl font-bold text-green-600 mt-2">
+				{product.image_url && (
+					<img
+					src={product.image_url}
+					alt={product.name}
+					className="w-full h-48 object-cover"
+					/>
+				)}
+				<div className="p-5">
+					<h2 className="text-xl font-semibold">{product.name}</h2>
+					{product.description && (
+					<p className="text-sm text-gray-600 mt-1 line-clamp-2">{product.description}</p>
+					)}
+					<p className="text-2xl font-bold text-green-600 mt-2">
 					{formatCents(product.price_cents)}
-				</p>
-				<p className="text-sm text-gray-500 mt-1">
+					</p>
+					<p className="text-sm text-gray-500 mt-1">
 					Stock: {product.stock_quantity}
-				</p>
-				<p className="text-xs text-gray-400 mt-3 border-t pt-2">
-					Sold by: {product.vendor_email}
-				</p>
+					</p>
+				</div>
 				</div>
 			))}
 			</div>

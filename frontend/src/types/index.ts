@@ -6,8 +6,11 @@ export interface Product
 	description: string | null;
 	price_cents: number;
 	stock_quantity: number;
+	image_url: string;
+	category_id: number | null;
+	is_featured: number;
+	updated_at: string | null;
 	user_id: number;
-	vendor_email: string;
 }
 
 export interface ProductsApiResponse
