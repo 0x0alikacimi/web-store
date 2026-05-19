@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Container } from "@/components/layout";
-import { ProductCard } from "@/components/ProductCard";
 import { Product, Category, ProductsApiResponse, CategoriesApiResponse } from "@/types";
 import { API_BASE_URL } from "@/lib/config";
+import { FadeIn } from "@/components/motion/FadeIn";
+import { AnimatedProductGrid } from "@/components/motion/AnimatedProductGrid";
 
 async function getFeaturedProducts(): Promise<Product[]> {
   try {
@@ -84,9 +85,9 @@ export default async function HomePage() {
 
       {/* ── Categories ── */}
       {categories.length > 0 && (
-        <section className="border-b border-stone-200">
+        <section className="border-b border-sand">
           <Container>
-            <div className="py-16 md:py-20">
+            <FadeIn className="py-16 md:py-20">
               <div className="flex items-center gap-8 mb-10">
                 <span className="text-[10px] tracking-[0.35em] uppercase text-stone-400 shrink-0">
                   01 — Shop by Category
@@ -98,7 +99,7 @@ export default async function HomePage() {
                   <Link
                     key={cat.id}
                     href={`/shop?category=${cat.id}`}
-                    className="group relative px-7 py-3 text-xs tracking-[0.15em] uppercase border border-stone-300 overflow-hidden transition-colors duration-300 hover:border-charcoal"
+                    className="group relative px-7 py-3 text-xs tracking-[0.15em] uppercase border border-sand overflow-hidden transition-colors duration-300 hover:border-charcoal"
                   >
                     <span className="absolute inset-0 bg-charcoal translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
                     <span className="relative text-charcoal group-hover:text-ivory transition-colors duration-300">
@@ -107,17 +108,17 @@ export default async function HomePage() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </FadeIn>
           </Container>
         </section>
       )}
 
       {/* ── Featured Products ── */}
       {featuredProducts.length > 0 && (
-        <section className="border-b border-stone-200">
+        <section className="border-b border-sand">
           <Container>
             <div className="py-24 md:py-28">
-              <div className="flex items-end justify-between mb-14">
+              <FadeIn className="flex items-end justify-between mb-14">
                 <div>
                   <div className="flex items-center gap-6 mb-4">
                     <span className="text-[10px] tracking-[0.35em] uppercase text-stone-400">
@@ -136,22 +137,18 @@ export default async function HomePage() {
                   View all
                   <span className="block w-7 h-px bg-stone-300 group-hover:w-12 group-hover:bg-charcoal transition-all duration-300" />
                 </Link>
-              </div>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-                {featuredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              </FadeIn>
+              <AnimatedProductGrid products={featuredProducts} />
             </div>
           </Container>
         </section>
       )}
 
       {/* ── New Arrivals ── */}
-      <section className="border-b border-stone-200">
+      <section className="border-b border-sand">
         <Container>
           <div className="py-24 md:py-28">
-            <div className="flex items-end justify-between mb-14">
+            <FadeIn className="flex items-end justify-between mb-14">
               <div>
                 <div className="flex items-center gap-6 mb-4">
                   <span className="text-[10px] tracking-[0.35em] uppercase text-stone-400">
@@ -170,13 +167,9 @@ export default async function HomePage() {
                 View all
                 <span className="block w-7 h-px bg-stone-300 group-hover:w-12 group-hover:bg-charcoal transition-all duration-300" />
               </Link>
-            </div>
+            </FadeIn>
             {newArrivals.length > 0 ? (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-                {newArrivals.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <AnimatedProductGrid products={newArrivals} />
             ) : (
               <p className="text-sm text-stone-400 tracking-wide">Check back soon.</p>
             )}
@@ -187,7 +180,7 @@ export default async function HomePage() {
       {/* ── Newsletter ── */}
       <section className="py-32 md:py-36">
         <Container>
-          <div className="max-w-md mx-auto text-center">
+          <FadeIn className="max-w-md mx-auto text-center">
             <span className="text-[10px] tracking-[0.45em] uppercase text-stone-400 block mb-5">
               The Edit
             </span>
@@ -203,13 +196,13 @@ export default async function HomePage() {
               <input
                 type="email"
                 placeholder="your@email.com"
-                className="flex-1 min-w-0 px-5 py-3.5 text-sm border border-stone-300 border-r-0 bg-white text-charcoal placeholder:text-stone-400 focus:outline-none focus:border-charcoal transition-colors duration-200"
+                className="flex-1 min-w-0 px-5 py-3.5 text-sm border border-sand border-r-0 bg-transparent text-charcoal placeholder:text-stone-400 focus:outline-none focus:border-charcoal transition-colors duration-200"
               />
-              <button className="px-7 py-3.5 text-[10px] tracking-[0.25em] uppercase bg-charcoal text-ivory hover:bg-stone-800 transition-colors duration-200 whitespace-nowrap shrink-0">
+              <button type="button" className="px-7 py-3.5 text-[10px] tracking-[0.25em] uppercase bg-charcoal text-ivory hover:bg-stone-800 transition-colors duration-200 whitespace-nowrap shrink-0">
                 Subscribe
               </button>
             </div>
-          </div>
+          </FadeIn>
         </Container>
       </section>
 

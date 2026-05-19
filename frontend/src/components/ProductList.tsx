@@ -1,10 +1,21 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { Product, ProductsApiResponse, Category } from "@/types";
 import { ProductCard } from "@/components/ProductCard";
 import { API_BASE_URL } from "@/lib/config";
 import { PRODUCTS_LIMIT } from "@/lib/constants";
+
+const gridVariants = {
+	hidden: {},
+	visible: { transition: { staggerChildren: 0.07 } },
+};
+
+const cardVariants = {
+	hidden: { opacity: 0, y: 20 },
+	visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
 
 const LIMIT = PRODUCTS_LIMIT;
 
@@ -93,7 +104,7 @@ export function ProductList({ initialProducts, categories, initialCategoryId = n
 			<div className="mb-14">
 				<div className="flex items-center gap-6 mb-6">
 					<span className="text-[10px] tracking-[0.35em] uppercase text-stone-400 shrink-0">Filter</span>
-					<div className="flex-1 h-px bg-stone-200" />
+					<div className="flex-1 h-px bg-sand" />
 				</div>
 				<div className="flex flex-wrap gap-2">
 					<button
@@ -102,7 +113,7 @@ export function ProductList({ initialProducts, categories, initialCategoryId = n
 						className={`px-4 py-1.5 text-[11px] tracking-[0.1em] border transition-colors duration-200 disabled:cursor-not-allowed ${
 							activeCategoryId === null
 								? "bg-charcoal text-ivory border-charcoal"
-								: "text-stone-500 border-stone-300 hover:border-charcoal hover:text-charcoal"
+								: "text-stone-400 border-sand hover:border-charcoal hover:text-charcoal"
 						}`}
 					>
 						All
@@ -115,7 +126,7 @@ export function ProductList({ initialProducts, categories, initialCategoryId = n
 							className={`px-4 py-1.5 text-[11px] tracking-[0.1em] border transition-colors duration-200 disabled:cursor-not-allowed ${
 								activeCategoryId === cat.id
 									? "bg-charcoal text-ivory border-charcoal"
-									: "text-stone-500 border-stone-300 hover:border-charcoal hover:text-charcoal"
+									: "text-stone-400 border-sand hover:border-charcoal hover:text-charcoal"
 							}`}
 						>
 							{cat.name}
@@ -149,11 +160,18 @@ export function ProductList({ initialProducts, categories, initialCategoryId = n
 					</p>
 				</div>
 			) : (
-				<div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10">
+				<motion.div
+					className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10"
+					variants={gridVariants}
+					initial="hidden"
+					animate="visible"
+				>
 					{products.map((product) => (
-						<ProductCard key={product.id} product={product} />
+						<motion.div key={product.id} variants={cardVariants}>
+							<ProductCard product={product} />
+						</motion.div>
 					))}
-				</div>
+				</motion.div>
 			)}
 
 			{hasMore && !isFiltering && !filterError && (
@@ -161,7 +179,7 @@ export function ProductList({ initialProducts, categories, initialCategoryId = n
 					<button
 						onClick={loadMore}
 						disabled={isPaginating}
-						className="flex items-center gap-2.5 px-8 py-3 text-[10px] tracking-[0.25em] uppercase text-stone-500 border border-stone-300 hover:border-charcoal hover:text-charcoal disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+						className="flex items-center gap-2.5 px-8 py-3 text-[10px] tracking-[0.25em] uppercase text-stone-400 border border-sand hover:border-charcoal hover:text-charcoal disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
 					>
 						{isPaginating && (
 							<span className="inline-block w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />

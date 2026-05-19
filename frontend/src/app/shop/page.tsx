@@ -1,7 +1,9 @@
 import { Product, ProductsApiResponse, Category, CategoriesApiResponse } from "@/types";
 import { ProductList } from "@/components/ProductList";
+import { Container } from "@/components/layout";
 import { API_BASE_URL } from "@/lib/config";
 import { PRODUCTS_LIMIT } from "@/lib/constants";
+import { FadeIn } from "@/components/motion/FadeIn";
 
 async function getProducts(categoryId: number | null): Promise<Product[]>
 {
@@ -36,25 +38,29 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
 
 	return (
 		<main>
-			<div className="border-b border-stone-200">
-				<div className="max-w-6xl mx-auto px-8 py-16 md:py-20">
-					<span className="text-[10px] tracking-[0.45em] uppercase text-stone-400">Collection</span>
-					<h1 className="font-display text-5xl md:text-6xl italic font-light text-charcoal tracking-tight mt-3 mb-4">
-						Shop All
-					</h1>
-					<p className="text-sm text-stone-500 tracking-wide leading-relaxed max-w-xs">
-						Carefully selected pieces, made to last.
-					</p>
-				</div>
+			<div className="border-b border-sand">
+				<Container>
+					<FadeIn className="py-16 md:py-20">
+						<span className="text-[10px] tracking-[0.45em] uppercase text-stone-400">Collection</span>
+						<h1 className="font-display text-5xl md:text-6xl italic font-light text-charcoal tracking-tight mt-3 mb-4">
+							Shop All
+						</h1>
+						<p className="text-sm text-stone-500 tracking-wide leading-relaxed max-w-xs">
+							Carefully selected pieces, made to last.
+						</p>
+					</FadeIn>
+				</Container>
 			</div>
 
-			<div className="max-w-6xl mx-auto px-8 py-16 md:py-20">
-				<ProductList
-					initialProducts={products}
-					categories={categories}
-					initialCategoryId={initialCategoryId}
-				/>
-			</div>
+			<Container>
+				<div className="py-16 md:py-20">
+					<ProductList
+						initialProducts={products}
+						categories={categories}
+						initialCategoryId={initialCategoryId}
+					/>
+				</div>
+			</Container>
 		</main>
 	);
 }

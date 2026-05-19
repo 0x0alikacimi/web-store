@@ -18,7 +18,7 @@ export function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-[rgba(250,248,244,0.92)] backdrop-blur-md border-b border-[#e8e0d5]'
+          ? 'bg-ivory/[0.92] backdrop-blur-md border-b border-sand'
           : 'bg-transparent'
       }`}
     >
@@ -42,6 +42,7 @@ export function Navbar() {
 
           <div className="flex items-center gap-4">
             <button
+              type="button"
               className={`p-1 transition-colors duration-500 ${scrolled ? 'text-charcoal hover:text-stone-400' : 'text-white hover:text-stone-300'}`}
               aria-label="Search"
             >
@@ -61,6 +62,7 @@ export function Navbar() {
             </button>
 
             <button
+              type="button"
               className={`p-1 transition-colors duration-500 ${scrolled ? 'text-charcoal hover:text-stone-400' : 'text-white hover:text-stone-300'}`}
               aria-label="Cart"
             >
@@ -81,6 +83,7 @@ export function Navbar() {
             </button>
 
             <button
+              type="button"
               className={`md:hidden p-1 transition-colors duration-500 ${scrolled ? 'text-charcoal hover:text-stone-400' : 'text-white hover:text-stone-300'}`}
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -116,7 +119,7 @@ export function Navbar() {
       </Container>
 
       {menuOpen && (
-        <div className="md:hidden border-t border-[#e8e0d5] bg-[rgba(250,248,244,0.96)] backdrop-blur-md">
+        <div className="md:hidden border-t border-sand bg-ivory/[0.96] backdrop-blur-md">
           <Container>
             <nav className="flex flex-col py-7 gap-6">
               <Link
